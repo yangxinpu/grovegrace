@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elite UI Design Architect"
+  short_description: "Designer-grade UI polish with hierarchy and system rigor."
+  default_prompt: "Use $elite-ui-design-architect to audit this UI and deliver a production-ready redesign with clear hierarchy and spacing tokens."

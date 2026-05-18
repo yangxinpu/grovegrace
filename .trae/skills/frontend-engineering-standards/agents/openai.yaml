@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Engineering Standards"
+  short_description: "Enforce frontend architecture and quality standards."
+  default_prompt: "Use $frontend-engineering-standards to review, refactor, or implement frontend code with strict production-grade architecture and quality standards."

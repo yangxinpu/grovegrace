@@ -1,0 +1,4 @@
+interface:
+  display_name: "Advanced Animation Design Architect"
+  short_description: "High-impact frontend motion architecture standards."
+  default_prompt: "Use $advanced-animation-design-architect to design and implement high-performance, production-ready web animations for this interface."
