@@ -1,5 +1,7 @@
 # GroveGrace
 
+林下之风，致力于打造纯净、优质的名人名言与经典美文聚合平台。网站系统收录整理古今中外各界名人语录、哲理金句、传世散文、随笔好文、经典篇章，分类规整、持续更新，为用户提供摘抄素材、静心阅读、文案灵感、文字赏析的线上空间
+
 ## 技术栈
 
 React · TypeScript · Vite · React Router · Zustand · Axios · TailwindCSS · shadcn/ui
