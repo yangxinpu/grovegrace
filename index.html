@@ -8,6 +8,16 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      //SSR 兼容方案——在 index.html 中注入一段内联脚本，确保页面加载时不会出现主题闪烁
+      (function () {
+        var t = localStorage.getItem('grovegrace-theme')
+        var d = t === 'system' || !t
+          ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          : t === 'dark'
+        document.documentElement.classList.toggle('dark', d)
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
