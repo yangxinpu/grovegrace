@@ -24,8 +24,9 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@mocks/*": ["./mocks/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "mocks"]
 }

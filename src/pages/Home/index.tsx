@@ -1,6 +1,9 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { getLatestQuotes } from '@/api/quote.service'
+import type { Quote } from '@/types/api'
 
+/** 叶片球面坐标点 */
 interface LeafPoint {
   theta: number
   phi: number
@@ -11,7 +14,21 @@ interface LeafPoint {
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [quote, setQuote] = useState<Quote | null>(null)
 
+  const quoteLines = useMemo(() => {
+    const text = quote?.content ?? '人文故事与创意'
+    return text.split('，')
+  }, [quote])
+  // 获取最新名言
+  useEffect(() => {
+    getLatestQuotes({ limit: 1 }).then((res) => {
+      if (res.data.length > 0) {
+        setQuote(res.data[0])
+      }
+    }).catch(() => {})
+  }, [])
+  // 树叶球形动画
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -67,7 +84,6 @@ export default function Home() {
       idleTime = 0
       lastX = e.clientX
       lastY = e.clientY
-      canvas.style.cursor = 'grabbing'
     }
 
     function onPointerMove(e: PointerEvent) {
@@ -84,15 +100,14 @@ export default function Home() {
 
     function onPointerUp() {
       isDragging = false
-      canvas.style.cursor = 'grab'
     }
 
-    canvas.style.cursor = 'grab'
     canvas.style.touchAction = 'none'
     canvas.addEventListener('pointerdown', onPointerDown)
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerup', onPointerUp)
 
+    /** 球面坐标 → 屏幕坐标投影 */
     function project(theta: number, phi: number, rotY: number, rotX: number) {
       const x0 = Math.sin(phi) * Math.cos(theta)
       const y0 = Math.cos(phi)
@@ -115,21 +130,22 @@ export default function Home() {
     }
 
     function drawLeaf(px: number, py: number, size: number, angle: number, color: string, alpha: number) {
-      ctx.save()
-      ctx.translate(px, py)
-      ctx.rotate(angle)
-      ctx.globalAlpha = alpha
-      ctx.fillStyle = color
-      ctx.beginPath()
-      ctx.moveTo(0, -size)
-      ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.6, size * 0.5, 0, size)
-      ctx.bezierCurveTo(-size * 0.6, size * 0.5, -size * 0.8, -size * 0.5, 0, -size)
-      ctx.fill()
-      ctx.restore()
+      ctx!.save()
+      ctx!.translate(px, py)
+      ctx!.rotate(angle)
+      ctx!.globalAlpha = alpha
+      ctx!.fillStyle = color
+      ctx!.beginPath()
+      ctx!.moveTo(0, -size)
+      ctx!.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.6, size * 0.5, 0, size)
+      ctx!.bezierCurveTo(-size * 0.6, size * 0.5, -size * 0.8, -size * 0.5, 0, -size)
+      ctx!.fill()
+      ctx!.restore()
     }
 
+    /** 主动画循环 */
     function animate() {
-      ctx.clearRect(0, 0, W, H)
+      ctx!.clearRect(0, 0, W, H)
 
       if (!isDragging) {
         idleTime++
@@ -170,32 +186,63 @@ export default function Home() {
   }, [])
 
   return (
-    <section className="h-full flex items-center">
+    <section className="h-full flex items-center pt-12">
       <div className="max-w-7xl mx-auto px-6 w-full">
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-          <div className="space-y-6 md:space-y-8">
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight text-foreground">
-              人文故事<br />与创意
+        <div className="flex flex-col gap-8">
+          <div className="text-center">
+            <h1 className="text-2xl md:text-3xl font-bold leading-snug text-foreground whitespace-nowrap" style={{ fontFamily: 'var(--font-quote)' }}>
+              {quoteLines.map((line, i) => (
+                <span
+                  key={i}
+                  className="inline-block"
+                  style={{ animation: `reveal-text 0.8s ease-out ${i * 0.4 + 0.2}s both` }}
+                >
+                  {line}{i < quoteLines.length - 1 ? '，' : ''}
+                  {i < quoteLines.length - 1 && <br />}
+                </span>
+              ))}
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              一个阅读、创作，以及深化理解的地方
-            </p>
-            <div className="flex gap-3 pt-2 pl-20">
-              <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
-                阅读文章
-              </Link>
-              <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
-                阅读名言
-              </Link>
-            </div>
+            {quote && (
+              <p
+                className="text-sm md:text-base text-muted-foreground opacity-0 inline-block ml-auto"
+                style={{ animation: `fade-in-up 0.6s ease-out ${quoteLines.length * 0.4 + 1}s forwards` }}
+              >
+                —— {quote.author}《{quote.source}》
+              </p>
+            )}
           </div>
 
-          <div className="relative aspect-square max-w-lg mx-auto md:max-w-none">
-            <canvas
-              ref={canvasRef}
-              className="w-full h-full"
-              style={{ display: 'block' }}
-            />
+          <div className="grid md:grid-cols-2 items-center">
+            <div className="space-y-5 text-center">
+              <p
+                className="text-base md:text-lg text-muted-foreground leading-relaxed opacity-0"
+                style={{ animation: 'fade-in-up 0.6s ease-out 0.5s forwards' }}
+              >
+                一个阅读、创作，以及深化理解的地方
+              </p>
+              <div
+                className="flex gap-3 opacity-0"
+                style={{ animation: 'fade-in-up 0.6s ease-out 0.7s forwards' }}
+              >
+                <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
+                  阅读文章
+                </Link>
+                <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
+                  阅读名言
+                </Link>
+              </div>
+            </div>
+
+            <div
+              className="relative aspect-square max-w-sm mx-auto opacity-0"
+              style={{ animation: 'fade-in-up 0.8s ease-out 0.4s forwards' }}
+            >
+              <canvas
+                ref={canvasRef}
+                className="w-full h-full"
+                style={{ display: 'block' }}
+              />
+            </div>
           </div>
         </div>
       </div>
