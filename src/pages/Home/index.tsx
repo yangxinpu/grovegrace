@@ -1,75 +1,201 @@
+import { useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
+interface LeafPoint {
+  theta: number
+  phi: number
+  size: number
+  rotation: number
+  color: string
+}
+
 export default function Home() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const dpr = window.devicePixelRatio || 1
+    const rect = canvas.getBoundingClientRect()
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+    ctx.scale(dpr, dpr)
+
+    const W = rect.width
+    const H = rect.height
+    const cx = W / 2
+    const cy = H / 2
+    const R = Math.min(W, H) * 0.25
+
+    const isDark = document.documentElement.classList.contains('dark')
+    const leafColors = isDark
+      ? ['rgba(15,217,166,0.85)', 'rgba(59,162,254,0.75)', 'rgba(15,217,166,0.65)', 'rgba(43,138,224,0.6)', 'rgba(25,250,198,0.7)']
+      : ['rgba(15,217,166,0.9)', 'rgba(43,138,224,0.8)', 'rgba(15,217,166,0.7)', 'rgba(43,138,224,0.65)', 'rgba(25,250,198,0.75)']
+
+    const LEAF_COUNT = 200
+    const leaves: LeafPoint[] = []
+
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5))
+    for (let i = 0; i < LEAF_COUNT; i++) {
+      const y = 1 - (i / (LEAF_COUNT - 1)) * 2
+      const theta = goldenAngle * i
+      leaves.push({
+        theta,
+        phi: Math.acos(y),
+        size: 3 + Math.random() * 3,
+        rotation: Math.random() * Math.PI * 2,
+        color: leafColors[Math.floor(Math.random() * leafColors.length)],
+      })
+    }
+
+    let animId: number
+    let angleY = 0
+    let angleX = 0.3
+    let velocityY = 0.003
+    let velocityX = 0
+    let isDragging = false
+    let lastX = 0
+    let lastY = 0
+    let idleTime = 0
+
+    function onPointerDown(e: PointerEvent) {
+      isDragging = true
+      idleTime = 0
+      lastX = e.clientX
+      lastY = e.clientY
+      canvas.style.cursor = 'grabbing'
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!isDragging) return
+      const dx = e.clientX - lastX
+      const dy = e.clientY - lastY
+      velocityY = dx * 0.005
+      velocityX = dy * 0.005
+      angleY += velocityY
+      angleX += velocityX
+      lastX = e.clientX
+      lastY = e.clientY
+    }
+
+    function onPointerUp() {
+      isDragging = false
+      canvas.style.cursor = 'grab'
+    }
+
+    canvas.style.cursor = 'grab'
+    canvas.style.touchAction = 'none'
+    canvas.addEventListener('pointerdown', onPointerDown)
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+
+    function project(theta: number, phi: number, rotY: number, rotX: number) {
+      const x0 = Math.sin(phi) * Math.cos(theta)
+      const y0 = Math.cos(phi)
+      const z0 = Math.sin(phi) * Math.sin(theta)
+
+      const x1 = x0 * Math.cos(rotY) - z0 * Math.sin(rotY)
+      const z1 = x0 * Math.sin(rotY) + z0 * Math.cos(rotY)
+      const y1 = y0 * Math.cos(rotX) - z1 * Math.sin(rotX)
+      const z2 = y0 * Math.sin(rotX) + z1 * Math.cos(rotX)
+
+      const perspective = 3
+      const scale = perspective / (perspective + z2)
+
+      return {
+        sx: cx + x1 * R * scale,
+        sy: cy + y1 * R * scale,
+        z: z2,
+        scale,
+      }
+    }
+
+    function drawLeaf(px: number, py: number, size: number, angle: number, color: string, alpha: number) {
+      ctx.save()
+      ctx.translate(px, py)
+      ctx.rotate(angle)
+      ctx.globalAlpha = alpha
+      ctx.fillStyle = color
+      ctx.beginPath()
+      ctx.moveTo(0, -size)
+      ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.6, size * 0.5, 0, size)
+      ctx.bezierCurveTo(-size * 0.6, size * 0.5, -size * 0.8, -size * 0.5, 0, -size)
+      ctx.fill()
+      ctx.restore()
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H)
+
+      if (!isDragging) {
+        idleTime++
+        if (idleTime > 60) {
+          velocityY += (0.003 - velocityY) * 0.02
+          velocityX *= 0.95
+        }
+        velocityY *= 0.98
+        velocityX *= 0.98
+        angleY += velocityY
+        angleX += velocityX
+      }
+
+      const projected = leaves.map((leaf) => {
+        const p = project(leaf.theta, leaf.phi, angleY, angleX)
+        return { ...leaf, ...p }
+      })
+
+      projected.sort((a, b) => a.z - b.z)
+
+      projected.forEach((leaf) => {
+        const depthAlpha = 0.3 + (leaf.z + 1) * 0.35
+        const depthSize = leaf.size * leaf.scale
+        drawLeaf(leaf.sx, leaf.sy, depthSize, leaf.rotation + angleY * 0.5, leaf.color, depthAlpha)
+      })
+
+      animId = requestAnimationFrame(animate)
+    }
+
+    animId = requestAnimationFrame(animate)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      canvas.removeEventListener('pointerdown', onPointerDown)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+    }
+  }, [])
+
   return (
-    <section className="py-16 md:py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight text-highlight">
+    <section className="h-full flex items-center">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight text-foreground">
               人文故事<br />与创意
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               一个阅读、创作，以及深化理解的地方
             </p>
-            <div className="flex gap-4">
-              <button className="px-8 py-3 bg-highlight text-background rounded-full font-medium hover:opacity-90 transition-opacity">
-                开始阅读
-              </button>
+            <div className="flex gap-3 pt-2 pl-20">
+              <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
+                阅读文章
+              </Link>
+              <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
+                阅读名言
+              </Link>
             </div>
           </div>
 
-          <div className="relative">
-            <div className="aspect-square relative">
-              <div className="absolute top-0 right-0 w-2/3 h-2/3 bg-primary/20 rounded-lg flex items-center justify-center overflow-hidden">
-                <svg viewBox="0 0 200 200" className="w-full h-full text-primary/50">
-                  <path
-                    d="M100,100 C120,50 180,60 170,120 C160,180 40,160 50,100 C60,40 120,20 150,70"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <circle cx="100" cy="100" r="3" fill="currentColor" />
-                  <circle cx="150" cy="70" r="3" fill="currentColor" />
-                  <circle cx="170" cy="120" r="3" fill="currentColor" />
-                </svg>
-              </div>
-
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-primary/30 rounded-lg flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-3/4 h-3/4 text-primary/60">
-                  <path
-                    d="M20,70 Q30,40 70,35 L85,50 L70,65 Q50,75 45,55"
-                    fill="currentColor"
-                    stroke="none"
-                  />
-                  <path
-                    d="M80,45 L95,50 L85,60"
-                    fill="currentColor"
-                    stroke="none"
-                  />
-                </svg>
-              </div>
-
-              <div className="absolute top-1/4 right-1/4 w-1/3 h-1/3">
-                <svg viewBox="0 0 100 100" className="w-full h-full text-primary">
-                  <path
-                    d="M50,20 C30,20 20,40 20,55 C20,75 40,90 50,90 C60,90 80,75 80,55 C80,40 70,20 50,20 Z"
-                    fill="currentColor"
-                  />
-                  <circle cx="40" cy="50" r="6" fill="background" />
-                  <circle cx="60" cy="50" r="6" fill="background" />
-                  <path
-                    d="M40,65 Q50,75 60,65"
-                    fill="none"
-                    stroke="background"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-
-              <div className="absolute top-1/2 left-1/4 w-4 h-4 rounded-full bg-primary/40" />
-              <div className="absolute top-3/4 left-1/3 w-3 h-3 rounded-full bg-primary/30" />
-              <div className="absolute bottom-1/4 right-1/3 w-2 h-2 rounded-full bg-primary/50" />
-            </div>
+          <div className="relative aspect-square max-w-lg mx-auto md:max-w-none">
+            <canvas
+              ref={canvasRef}
+              className="w-full h-full"
+              style={{ display: 'block' }}
+            />
           </div>
         </div>
       </div>

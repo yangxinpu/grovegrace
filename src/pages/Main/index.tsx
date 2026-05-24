@@ -46,7 +46,7 @@ export default function Main() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-sm shadow-black/5">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <Link to="/" className={`flex items-center gap-2 ${searchFocused ? "transition-opacity duration-300 opacity-0 pointer-events-none" : "opacity-100"}`}>
             <img src={logo} alt="GroveGrace Logo" className="h-8 w-8 object-contain" />
@@ -90,13 +90,13 @@ export default function Main() {
               />
             </nav>
 
-            <div className={`flex items-center gap-2 px-3 py-1 bg-secondary rounded-md border ${searchFocused ? "transition-all duration-500 ease-in-out border-primary/50 ring-1 ring-primary/20 w-full shadow-lg shadow-primary/10" : "w-32 sm:w-40"}`}>
+            <div className={`flex items-center gap-2 px-2.5 py-1 rounded border ${searchFocused ? "transition-all duration-500 ease-in-out border-primary/40 ring-1 ring-primary/15 w-full shadow-md shadow-primary/5" : "bg-muted/50 border-border/50"}`}>
               <Search className={`w-3.5 h-3.5 text-muted-foreground shrink-0 transition-transform duration-300 ${searchFocused ? "scale-110" : ""}`} />
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="搜索..."
-                className="bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground w-full"
+                className="bg-transparent border-none outline-none text-xs placeholder:text-muted-foreground/60 w-full"
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
               />
@@ -167,16 +167,8 @@ export default function Main() {
         <Outlet />
       </main>
 
-      <footer className="py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <Link to="#" className="hover:text-foreground transition-colors">帮助</Link>
-            <Link to="#" className="hover:text-foreground transition-colors">状态</Link>
-            <Link to="#" className="hover:text-foreground transition-colors">关于</Link>
-            <Link to="#" className="hover:text-foreground transition-colors">隐私</Link>
-            <Link to="#" className="hover:text-foreground transition-colors">条款</Link>
-          </div>
-        </div>
+      <footer className="py-6 text-center text-xs text-muted-foreground">
+        © {new Date().getFullYear()} GroveGrace
       </footer>
     </div>
   )
