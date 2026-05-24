@@ -11,4 +11,8 @@ export default defineConfig({
       '@mocks': path.resolve(__dirname, './mocks'),
     },
   },
+  server: {
+    port: 8080,
+    open: true,
+  },
 })

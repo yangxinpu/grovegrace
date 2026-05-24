@@ -46,7 +46,7 @@ export default function Home() {
     const H = rect.height
     const cx = W / 2
     const cy = H / 2
-    const R = Math.min(W, H) * 0.25
+    const R = Math.min(W, H) * 0.45
 
     const isDark = document.documentElement.classList.contains('dark')
     const leafColors = isDark
@@ -186,55 +186,60 @@ export default function Home() {
   }, [])
 
   return (
-    <section className="h-full flex items-center pt-12">
+    <section className="flex items-center">
       <div className="max-w-7xl mx-auto px-6 w-full">
-        <div className="flex flex-col gap-8">
-          <div className="text-center">
-            <h1 className="text-2xl md:text-3xl font-bold leading-snug text-foreground whitespace-nowrap" style={{ fontFamily: 'var(--font-quote)' }}>
-              {quoteLines.map((line, i) => (
-                <span
-                  key={i}
-                  className="inline-block"
-                  style={{ animation: `reveal-text 0.8s ease-out ${i * 0.4 + 0.2}s both` }}
+        <div className="flex flex-col">
+          <div className="p-6 md:p-8 min-h-[120px] md:min-h-[160px]">
+            <div className="inline-flex flex-col items-start gap-4">
+              <h1 className="text-2xl md:text-3xl font-bold leading-snug text-foreground" style={{ fontFamily: 'var(--font-quote)' }}>
+                {quoteLines.map((line, i) => (
+                  <span
+                    key={i}
+                    className="inline-block"
+                    style={{ animation: `reveal-text 0.8s ease-out ${i * 0.4 + 0.2}s both` }}
+                  >
+                    {line}{i < quoteLines.length - 1 ? '，' : ''}
+                    {i < quoteLines.length - 1 && <br />}
+                  </span>
+                ))}
+              </h1>
+              {quote && (
+                <p
+                  className="text-sm md:text-base text-muted-foreground opacity-0 w-full text-right translate-x-10"
+                  style={{ animation: `fade-in-up 0.3s ease-out ${quoteLines.length * 0.4 + 1}s forwards` }}
                 >
-                  {line}{i < quoteLines.length - 1 ? '，' : ''}
-                  {i < quoteLines.length - 1 && <br />}
-                </span>
-              ))}
-            </h1>
-            {quote && (
-              <p
-                className="text-sm md:text-base text-muted-foreground opacity-0 inline-block ml-auto"
-                style={{ animation: `fade-in-up 0.6s ease-out ${quoteLines.length * 0.4 + 1}s forwards` }}
-              >
-                —— {quote.author}《{quote.source}》
-              </p>
-            )}
+                  —— {quote.author}《{quote.source}》
+                </p>
+              )}
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 items-center">
-            <div className="space-y-5 text-center">
-              <p
-                className="text-base md:text-lg text-muted-foreground leading-relaxed opacity-0"
-                style={{ animation: 'fade-in-up 0.6s ease-out 0.5s forwards' }}
-              >
-                一个阅读、创作，以及深化理解的地方
-              </p>
-              <div
-                className="flex gap-3 opacity-0"
-                style={{ animation: 'fade-in-up 0.6s ease-out 0.7s forwards' }}
-              >
-                <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
-                  阅读文章
-                </Link>
-                <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
-                  阅读名言
-                </Link>
+          <div className="grid md:grid-cols-2 gap-5 items-center">
+            <div className="flex flex-col items-center justify-center">
+              <div className="space-y-5">
+                <p className="flex flex-row items-center gap-3">
+                  <span className="font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-quote)' }}>林下之风</span>
+                  <span className="w-px h-4 bg-muted-foreground/40"></span>
+                  <span className="text-xs text-muted-foreground tracking-widest">GROVEGRACE</span>
+                </p>
+                <p
+                  className="text-base md:text-lg text-muted-foreground leading-relaxed text-left"
+                >
+                  一个阅读、创作，以及深化理解的地方
+                </p>
+                <div className="flex gap-3">
+                  <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
+                    阅读文章
+                  </Link>
+                  <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
+                    阅读名言
+                  </Link>
+                </div>
               </div>
             </div>
 
             <div
-              className="relative aspect-square max-w-sm mx-auto opacity-0"
+              className="relative w-full h-full opacity-0"
               style={{ animation: 'fade-in-up 0.8s ease-out 0.4s forwards' }}
             >
               <canvas
