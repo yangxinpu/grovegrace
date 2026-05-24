@@ -215,7 +215,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-5 items-center">
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center items-end">
               <div className="space-y-5">
                 <p className="flex flex-row items-center gap-3">
                   <span className="font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-quote)' }}>林下之风</span>
@@ -225,7 +225,7 @@ export default function Home() {
                 <p
                   className="text-base md:text-lg text-muted-foreground leading-relaxed text-left"
                 >
-                  一个阅读、创作，以及深化理解的地方
+                  一个阅读、提升，以及深化理解的地方
                 </p>
                 <div className="flex gap-3">
                   <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
@@ -239,7 +239,7 @@ export default function Home() {
             </div>
 
             <div
-              className="relative w-full h-full opacity-0"
+              className="opacity-0"
               style={{ animation: 'fade-in-up 0.8s ease-out 0.4s forwards' }}
             >
               <canvas

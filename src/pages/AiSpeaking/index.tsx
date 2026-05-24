@@ -1,29 +1,24 @@
+import { Sparkles } from 'lucide-react'
+
 export default function AiSpeaking() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-serif font-bold mb-4">AI 口语</h1>
-        <p className="text-muted-foreground text-lg">与 AI 对话，提升口语表达能力</p>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="p-6 rounded-xl border border-border bg-card">
-          <h2 className="text-lg font-semibold mb-2">情景对话</h2>
-          <p className="text-muted-foreground text-sm">模拟真实场景，与 AI 进行沉浸式口语练习</p>
+    <section className="min-h-[60vh] flex items-center justify-center py-16 md:py-24">
+      <div className="max-w-2xl mx-auto px-6 text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
+          <Sparkles className="w-10 h-10 text-primary" />
         </div>
-        <div className="p-6 rounded-xl border border-border bg-card">
-          <h2 className="text-lg font-semibold mb-2">发音纠正</h2>
-          <p className="text-muted-foreground text-sm">AI 实时分析发音，提供精准改进建议</p>
-        </div>
-        <div className="p-6 rounded-xl border border-border bg-card">
-          <h2 className="text-lg font-semibold mb-2">词汇积累</h2>
-          <p className="text-muted-foreground text-sm">在对话中学习高频词汇，自然掌握用法</p>
-        </div>
-        <div className="p-6 rounded-xl border border-border bg-card">
-          <h2 className="text-lg font-semibold mb-2">进度追踪</h2>
-          <p className="text-muted-foreground text-sm">记录学习历程，见证口语能力提升</p>
+        
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">页面建设中</h1>
+        <p className="text-muted-foreground text-lg mb-8">
+          AI 口语功能正在开发中，敬请期待！
+        </p>
+        
+        <div className="flex justify-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }}></span>
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }}></span>
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }}></span>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

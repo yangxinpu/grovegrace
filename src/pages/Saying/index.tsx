@@ -1,29 +1,22 @@
+import { Quote } from 'lucide-react'
+
 export default function Saying() {
   return (
-    <section className="py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-highlight">名言</h1>
+    <section className="min-h-[60vh] flex items-center justify-center py-16 md:py-24">
+      <div className="max-w-2xl mx-auto px-6 text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
+          <Quote className="w-10 h-10 text-primary" />
+        </div>
         
-        <div className="space-y-8">
-          <blockquote className="p-6 border-l-4 border-primary bg-card rounded-r-lg">
-            <p className="text-lg italic mb-3">"生活不是等待暴风雨过去，而是学会在雨中跳舞。"</p>
-            <footer className="text-sm text-muted-foreground">— 维维安·格林</footer>
-          </blockquote>
-          
-          <blockquote className="p-6 border-l-4 border-primary bg-card rounded-r-lg">
-            <p className="text-lg italic mb-3">"真正的智慧不是预见未来，而是知道当下什么是最有价值的。"</p>
-            <footer className="text-sm text-muted-foreground">— 苏格拉底</footer>
-          </blockquote>
-          
-          <blockquote className="p-6 border-l-4 border-primary bg-card rounded-r-lg">
-            <p className="text-lg italic mb-3">"我们不是等待未来，我们创造未来。"</p>
-            <footer className="text-sm text-muted-foreground">— 乔治·萧伯纳</footer>
-          </blockquote>
-          
-          <blockquote className="p-6 border-l-4 border-primary bg-card rounded-r-lg">
-            <p className="text-lg italic mb-3">"每一个不曾起舞的日子，都是对生命的辜负。"</p>
-            <footer className="text-sm text-muted-foreground">— 尼采</footer>
-          </blockquote>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">页面建设中</h1>
+        <p className="text-muted-foreground text-lg mb-8">
+          名言页面正在开发中，敬请期待！
+        </p>
+        
+        <div className="flex justify-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }}></span>
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }}></span>
+          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }}></span>
         </div>
       </div>
     </section>
