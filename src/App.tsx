@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useTheme, useAppStore } from '@/stores'
 import Loading from '@/components/Loading'
 import NotFound from '@/pages/NotFound'
+import { Toaster } from '@/components/ui/sonner'
 
 const Main = lazy(() => import('@/pages/Main'))
 const Home = lazy(() => import('@/pages/Home'))
-const Saying = lazy(() => import('@/pages/Saying'))
+const Quote = lazy(() => import('@/pages/Quote'))
+const QuoteDetail = lazy(() => import('@/pages/QuoteDetail'))
 const Article = lazy(() => import('@/pages/Article'))
 const News = lazy(() => import('@/pages/News'))
 const About = lazy(() => import('@/pages/About'))
@@ -34,7 +36,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Main />}>
               <Route index element={<Home />} />
-              <Route path="quotes" element={<Saying />} />
+              <Route path="quotes" element={<Quote />} />
+              <Route path="quote" element={<Quote />} />
+              <Route path="quote/:id" element={<QuoteDetail />} />
               <Route path="articles" element={<Article />} />
               <Route path="news" element={<News />} />
               <Route path="ai-speaking" element={<AiSpeaking />} />
@@ -44,6 +48,7 @@ export default function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
+      <Toaster />
     </>
   )
 }

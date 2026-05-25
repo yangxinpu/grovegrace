@@ -1,1 +1,7 @@
-export { createMockQuote, createMockQuoteList, type MockQuote } from './quote.faker'
+export {
+  createMockQuote,
+  createMockQuoteList,
+  createMockQuoteDetail,
+  type MockQuote,
+  type MockQuoteDetail,
+} from './quote.faker'

@@ -204,6 +204,10 @@
   }
 }
 
+.animate-fade-in {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
 @keyframes orbit-dot-glow {
   0%, 100% { box-shadow: 0 0 4px 1px currentColor; }
   50% { box-shadow: 0 0 8px 3px currentColor; }

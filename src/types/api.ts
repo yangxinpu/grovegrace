@@ -5,6 +5,20 @@ export interface Quote {
   author: string
   source: string
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom'
+  detailId: number
+  createdAt: string
+}
+
+/** 名言详情 */
+export interface QuoteDetail {
+  id: number
+  quoteId: number
+  content: string
+  author: string
+  source: string
+  category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom'
+  story: string
+  background: string
   createdAt: string
 }
 

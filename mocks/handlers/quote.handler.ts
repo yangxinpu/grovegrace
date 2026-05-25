@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw'
-import { createMockQuoteList } from '@mocks/fakers'
+import { createMockQuoteList, createMockQuoteDetail } from '@mocks/fakers'
 
 const BASE_URL = '/api'
 
@@ -36,9 +36,10 @@ export const quoteHandlers = [
       filtered = filtered.filter((q) => q.category === category)
     }
 
+    const sorted = filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     const start = (page - 1) * pageSize
     const end = start + pageSize
-    const paginatedList = filtered.slice(start, end)
+    const paginatedList = sorted.slice(start, end)
 
     return HttpResponse.json({
       code: 20000,
@@ -69,6 +70,28 @@ export const quoteHandlers = [
       code: 20000,
       message: '请求成功',
       data: quote,
+    })
+  }),
+
+  http.get(`${BASE_URL}/quotes/:id/detail`, async ({ params }) => {
+    await delay(300)
+
+    const id = Number(params.id)
+    const quote = quoteList.find((q) => q.id === id)
+
+    if (!quote) {
+      return HttpResponse.json(
+        { code: 40400, message: '请求资源不存在', data: null },
+        { status: 404 },
+      )
+    }
+
+    const detail = createMockQuoteDetail(quote)
+
+    return HttpResponse.json({
+      code: 20000,
+      message: '请求成功',
+      data: detail,
     })
   }),
 ]

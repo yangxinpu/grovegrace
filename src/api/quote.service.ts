@@ -1,5 +1,5 @@
 import { get } from './https'
-import type { Quote, PaginatedResponse, ApiResponse } from '@/types/api'
+import type { Quote, QuoteDetail, PaginatedResponse, ApiResponse } from '@/types/api'
 
 export async function getLatestQuotes(params?: {
   limit?: number
@@ -17,4 +17,8 @@ export async function getQuoteList(params?: {
 
 export async function getQuoteById(id: number): Promise<ApiResponse<Quote>> {
   return get<Quote>(`/quotes/${id}`)
+}
+
+export async function getQuoteDetail(id: number): Promise<ApiResponse<QuoteDetail>> {
+  return get<QuoteDetail>(`/quotes/${id}/detail`)
 }
