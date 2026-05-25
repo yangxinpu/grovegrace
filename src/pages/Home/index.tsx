@@ -187,9 +187,9 @@ export default function Home() {
 
   return (
     <section className="flex items-center">
-      <div className="max-w-7xl mx-auto px-6 w-full">
+      <div className="max-w-5xl mx-auto px-6 w-full">
         <div className="flex flex-col">
-          <div className="p-6 md:p-8 min-h-[120px] md:min-h-[160px]">
+          <div className="pt-8 pb-4 md:pt-10 md:pb-6">
             <div className="inline-flex flex-col items-start gap-4">
               <h1 className="text-2xl md:text-3xl font-bold leading-snug text-foreground" style={{ fontFamily: 'var(--font-quote)' }}>
                 {quoteLines.map((line, i) => (
@@ -214,24 +214,25 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-5 items-center">
-            <div className="flex flex-col items-center items-end">
-              <div className="space-y-5">
-                <p className="flex flex-row items-center gap-3">
-                  <span className="font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-quote)' }}>林下之风</span>
-                  <span className="w-px h-4 bg-muted-foreground/40"></span>
-                  <span className="text-xs text-muted-foreground tracking-widest">GROVEGRACE</span>
+          <div className="grid md:grid-cols-2 md:gap-10 items-center">
+            <div className="flex flex-col items-center">
+              <div className="space-y-6">
+                <p className="flex flex-row items-center gap-4">
+                  <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-quote)' }}>林下之风</span>
+                  <span className="w-px h-5 bg-muted-foreground/40"></span>
+                  <span className="text-sm md:text-base text-muted-foreground tracking-widest">GROVEGRACE</span>
                 </p>
-                <p
-                  className="text-base md:text-lg text-muted-foreground leading-relaxed text-left"
-                >
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed text-left">
                   一个阅读、提升，以及深化理解的地方
                 </p>
-                <div className="flex gap-3">
-                  <Link to="/articles" className="px-5 py-1.5 rounded-md font-medium text-sm bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
+                <p className="text-sm md:text-base text-muted-foreground/70 leading-relaxed text-left">
+                  每日更新，持续成长
+                </p>
+                <div className="flex gap-4">
+                  <Link to="/articles" className="px-6 py-2 rounded-md font-medium text-base bg-primary text-primary-foreground transition-all duration-200 hover:opacity-90 hover:shadow-lg">
                     阅读文章
                   </Link>
-                  <Link to="/quotes" className="px-5 py-1.5 rounded-md font-medium text-sm border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
+                  <Link to="/quotes" className="px-6 py-2 rounded-md font-medium text-base border border-primary/30 text-primary transition-all duration-200 hover:bg-primary/10 hover:shadow-lg">
                     阅读名言
                   </Link>
                 </div>

@@ -1,4 +1,4 @@
-import logo from "../../assets/images/logo.png"
+import logo from "@/assets/images/logo.png"
 
 export default function Loading() {
   return (
@@ -50,33 +50,6 @@ export default function Loading() {
           </h1>
         </div>
       </div>
-      <style>{`
-        @keyframes loading-circle {
-          0% {
-            stroke-dasharray: 1, 283;
-            stroke-dashoffset: 0;
-          }
-          50% {
-            stroke-dasharray: 150, 283;
-            stroke-dashoffset: -70;
-          }
-          100% {
-            stroke-dasharray: 1, 283;
-            stroke-dashoffset: -283;
-          }
-        }
-        @keyframes gradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-      `}</style>
     </div>
   )
 }

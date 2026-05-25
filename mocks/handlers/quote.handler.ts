@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw'
-import { createMockQuoteList } from '../fakers'
+import { createMockQuoteList } from '@mocks/fakers'
 
 const BASE_URL = '/api'
 
