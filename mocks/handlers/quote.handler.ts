@@ -1,11 +1,21 @@
 import { http, HttpResponse, delay } from 'msw'
-import { createMockQuoteList, createMockQuoteDetail } from '@mocks/fakers'
+import { createMockQuoteList, createMockQuoteDetail, CATEGORY_OPTIONS } from '@mocks/fakers'
 
 const BASE_URL = '/api'
 
-const quoteList = createMockQuoteList(20)
+const quoteList = createMockQuoteList(50)
 
 export const quoteHandlers = [
+  http.get(`${BASE_URL}/quotes/categories`, async () => {
+    await delay(200)
+
+    return HttpResponse.json({
+      code: 20000,
+      message: '请求成功',
+      data: CATEGORY_OPTIONS,
+    })
+  }),
+
   http.get(`${BASE_URL}/quotes/latest`, async ({ request }) => {
     await delay(300)
 

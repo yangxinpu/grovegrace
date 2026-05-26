@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getLatestQuotes } from '@/api/quote.service'
+import { getLatestQuotes } from '@/api'
 import type { Quote } from '@/types/api'
 
 /** 叶片球面坐标点 */

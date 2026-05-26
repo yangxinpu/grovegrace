@@ -4,8 +4,9 @@ export interface Quote {
   content: string
   author: string
   source: string
-  category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom'
+  category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
   detailId: number
+  background?: string
   createdAt: string
 }
 
@@ -16,10 +17,17 @@ export interface QuoteDetail {
   content: string
   author: string
   source: string
-  category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom'
+  category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
+  authorBio: string
   story: string
   background: string
   createdAt: string
+}
+
+/** 名言分类 */
+export interface Category {
+  value: string
+  label: string
 }
 
 /** 分页响应结构 */
