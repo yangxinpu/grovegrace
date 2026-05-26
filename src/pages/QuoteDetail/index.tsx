@@ -127,8 +127,8 @@ export default function QuoteDetailPage() {
 
             <div className="flex items-center gap-3">
               <span className="text-lg font-serif font-bold text-primary">林下之风</span>
-              <img src={logo} alt="GraceGrove Logo" className="w-8 h-8 object-contain" />
-              <span className="text-lg font-serif font-bold" style={{ color: '#39a2fe' }}>GraceGrove</span>
+              <img src={logo} alt="GroveGrace Logo" className="w-8 h-8 object-contain" />
+              <span className="text-lg font-serif font-bold" style={{ color: '#39a2fe' }}>GroveGrace</span>
             </div>
           </div>
         </div>
