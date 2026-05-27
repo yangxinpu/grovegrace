@@ -80,7 +80,7 @@ export default function Article() {
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-lg">
+            <div className="bg-card rounded-lg">
               <div className="space-y-0">
                 {articles.map((article, index) => (
                   <article

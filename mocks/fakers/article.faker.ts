@@ -34,7 +34,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '张明远',
     category: 'technology',
     tags: ['人工智能', '科技', '未来'],
-    cover: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800',
+    cover: 'https://picsum.photos/800/400?random=101',
   },
   {
     title: '庄子的逍遥游：追求精神的绝对自由',
@@ -51,7 +51,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '王文心',
     category: 'literature',
     tags: ['红楼梦', '文学', '人性'],
-    cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800',
+    cover: 'https://picsum.photos/800/400?random=102',
   },
   {
     title: '量子力学与意识：科学边界的哲学思考',
@@ -60,7 +60,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '陈物理',
     category: 'science',
     tags: ['量子力学', '意识', '科学'],
-    cover: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800',
+    cover: 'https://picsum.photos/800/400?random=103',
   },
   {
     title: '慢生活的艺术：在快节奏时代寻找内心的平静',
@@ -77,7 +77,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '周道明',
     category: 'wisdom',
     tags: ['老子', '智慧', '自然'],
-    cover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+    cover: 'https://picsum.photos/800/400?random=104',
   },
   {
     title: '印象派的光与色：莫奈绘画中的时间哲学',
@@ -86,7 +86,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '赵艺术',
     category: 'art',
     tags: ['莫奈', '印象派', '艺术'],
-    cover: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800',
+    cover: 'https://picsum.photos/800/400?random=105',
   },
   {
     title: '丝绸之路：古代世界的全球化',
@@ -103,7 +103,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '刘技术',
     category: 'technology',
     tags: ['深度学习', 'AI', '技术'],
-    cover: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800',
+    cover: 'https://picsum.photos/800/400?random=106',
   },
   {
     title: '存在主义的自由：萨特与"他人即地狱"',
@@ -112,7 +112,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '杨哲学',
     category: 'philosophy',
     tags: ['萨特', '存在主义', '自由'],
-    cover: 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=800',
+    cover: 'https://picsum.photos/800/400?random=107',
   },
   {
     title: '诗歌的力量：从杜甫看中国古典诗歌的现实关怀',
@@ -129,7 +129,7 @@ const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCo
     author: '钱科学',
     category: 'science',
     tags: ['相对论', '爱因斯坦', '物理'],
-    cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800',
+    cover: 'https://picsum.photos/800/400?random=108',
   },
 ]
 
