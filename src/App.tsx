@@ -10,6 +10,7 @@ const Home = lazy(() => import('@/pages/Home'))
 const Quote = lazy(() => import('@/pages/Quote'))
 const QuoteDetail = lazy(() => import('@/pages/QuoteDetail'))
 const Article = lazy(() => import('@/pages/Article'))
+const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'))
 const News = lazy(() => import('@/pages/News'))
 const About = lazy(() => import('@/pages/About'))
 const AiSpeaking = lazy(() => import('@/pages/AiSpeaking'))
@@ -40,6 +41,7 @@ export default function App() {
               <Route path="quote" element={<Quote />} />
               <Route path="quote/:id" element={<QuoteDetail />} />
               <Route path="articles" element={<Article />} />
+              <Route path="article/:id" element={<ArticleDetail />} />
               <Route path="news" element={<News />} />
               <Route path="ai-speaking" element={<AiSpeaking />} />
               <Route path="about" element={<About />} />

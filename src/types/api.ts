@@ -40,8 +40,6 @@ export interface Article {
   category: 'technology' | 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'art' | 'history'
   cover?: string
   tags: string[]
-  readTime: number
-  viewCount: number
   likeCount: number
   createdAt: string
   updatedAt: string

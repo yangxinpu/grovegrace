@@ -1,37 +1,23 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   BookOpen, 
-  Calendar, 
-  Clock, 
-  Eye, 
   Heart, 
-  ChevronRight, 
-  Loader2, 
-  Search,
-  X 
+  Loader2
 } from 'lucide-react'
-import { getArticleList, getArticleCategories } from '@/api'
-import type { Article, Category } from '@/types/api'
+import { getArticleList } from '@/api'
+import type { Article } from '@/types/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
-import { formatDate } from '@/utils'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
-import { VirtualList } from '@/components/VirtualList'
 
 export default function Article() {
   const navigate = useNavigate()
   const { showLoading, hideLoading } = useAppStore()
   const [articles, setArticles] = useState<Article[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
-  const [category, setCategory] = useState('')
-  const [keyword, setKeyword] = useState('')
-  const [searchInput, setSearchInput] = useState('')
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [isSticky, setIsSticky] = useState(false)
-  const categoryRef = useRef<HTMLDivElement>(null)
-  const pageSize = 8
+  const pageSize = 10
 
   const hasMore = articles.length < total
 
@@ -39,9 +25,7 @@ export default function Article() {
     try {
       const res = await getArticleList({ 
         page: page + 1, 
-        pageSize, 
-        category: category || undefined,
-        keyword: keyword || undefined
+        pageSize
       })
       if (res.code === 20000 && res.data) {
         setArticles(prev => [...prev, ...res.data.list])
@@ -51,7 +35,7 @@ export default function Article() {
       console.error('加载更多文章失败:', error)
       toast.error('加载失败，请稍后重试')
     }
-  }, [page, pageSize, category, keyword])
+  }, [page, pageSize])
 
   const { observerRef, isLoading } = useInfiniteScroll({
     onLoadMore: loadMoreArticles,
@@ -60,44 +44,12 @@ export default function Article() {
   })
 
   useEffect(() => {
-    function handleScroll() {
-      if (categoryRef.current) {
-        const rect = categoryRef.current.getBoundingClientRect()
-        const headerHeight = 56
-        const isFixed = rect.top <= headerHeight + 1
-        setIsSticky(isFixed)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const res = await getArticleCategories()
-        if (res.code === 20000 && res.data) {
-          setCategories(res.data)
-        }
-      } catch (error) {
-        console.error('获取分类选项失败:', error)
-        toast.error('获取分类选项失败')
-      }
-    }
-    fetchCategories()
-  }, [])
-
-  useEffect(() => {
     async function fetchArticles() {
       showLoading()
       try {
         const res = await getArticleList({ 
           page: 1, 
-          pageSize, 
-          category: category || undefined,
-          keyword: keyword || undefined
+          pageSize
         })
         if (res.code === 20000 && res.data) {
           setArticles(res.data.list)
@@ -112,178 +64,81 @@ export default function Article() {
       }
     }
     fetchArticles()
-  }, [category, keyword, showLoading, hideLoading])
-
-  const handleCategoryChange = useCallback((newCategory: string) => {
-    setCategory(newCategory)
-  }, [])
-
-  const handleSearch = useCallback(() => {
-    setKeyword(searchInput.trim())
-  }, [searchInput])
-
-  const handleClearSearch = useCallback(() => {
-    setSearchInput('')
-    setKeyword('')
-  }, [])
-
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
-  }, [handleSearch])
+  }, [showLoading, hideLoading])
 
   const handleArticleClick = useCallback((articleId: number) => {
     navigate(`/article/${articleId}`)
   }, [navigate])
 
-  const renderArticleItem = useCallback((article: Article) => (
-    <article
-      onClick={() => handleArticleClick(article.id)}
-      className="group relative bg-card rounded-xl overflow-hidden shadow-sm border border-border/50 cursor-pointer hover:shadow-lg hover:border-primary/20 transition-all duration-300"
-    >
-      {article.cover && (
-        <div className="relative h-48 overflow-hidden">
-          <img
-            src={article.cover}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="flex flex-wrap gap-2">
-              {article.tags.slice(0, 3).map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 rounded-md text-xs font-medium bg-white/20 backdrop-blur-sm text-white"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
-          {article.title}
-        </h3>
-        
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed">
-          {article.summary}
-        </p>
-        
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <span className="font-medium text-foreground/80">{article.author}</span>
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              {formatDate(article.createdAt)}
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {article.readTime}分钟
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="w-3 h-3" />
-              {article.viewCount}
-            </span>
-            <span className="flex items-center gap-1">
-              <Heart className="w-3 h-3" />
-              {article.likeCount}
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-        <ChevronRight className="w-4 h-4 text-primary" />
-      </div>
-    </article>
-  ), [handleArticleClick])
-
   return (
-    <section className="bg-background py-12 px-6">
-      <div className="max-w-6xl mx-auto">
-        <header className="mb-12 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-            <BookOpen className="w-8 h-8 text-primary" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">文章阅读</h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            探索思想的深度，感受文字的温度
-          </p>
-        </header>
-
-        <div 
-          ref={categoryRef}
-          className="sticky top-14 z-40 -mx-6 px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/30 transition-all duration-500"
-        >
-          <div className={`flex flex-col md:flex-row gap-4 transition-all duration-500 ${isSticky ? 'md:justify-between' : 'md:justify-center'}`}>
-            <div className={`flex flex-wrap gap-2 ${isSticky ? 'md:justify-start' : 'md:justify-center'}`}>
-              {categories.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => handleCategoryChange(option.value)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    category === option.value
-                      ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
-                      : 'bg-muted hover:bg-muted/80 text-muted-foreground'
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            
-            <div className={`flex items-center gap-2 ${isSticky ? 'md:justify-end' : 'md:justify-center'}`}>
-              <div className="relative flex-1 md:w-64">
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="搜索文章..."
-                  className="w-full pl-10 pr-10 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                {searchInput && (
-                  <button
-                    onClick={handleClearSearch}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-              <button
-                onClick={handleSearch}
-                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
-              >
-                搜索
-              </button>
-            </div>
-          </div>
-        </div>
-
+    <section className="bg-background min-h-screen relative">
+      <div className="max-w-4xl mx-auto px-10 py-12">
         {articles.length === 0 ? (
           <div className="text-center py-20">
             <BookOpen className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">暂无文章</p>
-            <p className="text-muted-foreground/70 text-sm mt-2">尝试调整筛选条件或搜索关键词</p>
           </div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-              {articles.map((article) => (
-                <div key={article.id}>
-                  {renderArticleItem(article)}
-                </div>
-              ))}
+            <div className="bg-white rounded-lg">
+              <div className="space-y-0">
+                {articles.map((article, index) => (
+                  <article
+                    key={article.id}
+                    onClick={() => handleArticleClick(article.id)}
+                    className="group cursor-pointer transition-all duration-200"
+                  >
+                    <div className="py-4 px-4">
+                      <div className="flex gap-4 mb-3">
+                        {article.cover && (
+                          <div className="flex-shrink-0 w-32 h-24 md:w-40 md:h-28 rounded-md overflow-hidden">
+                            <img
+                              src={article.cover}
+                              alt={article.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        
+                        <div className="flex-1 min-w-0 text-left">
+                          <h3 className="text-lg font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors text-left">
+                            {article.title}
+                          </h3>
+                          
+                          <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed text-left">
+                            {article.summary}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <span className="font-medium text-foreground/70">{article.author}</span>
+                          
+                          <div className="flex items-center gap-1">
+                            <Heart className="w-3.5 h-3.5" />
+                            <span>{article.likeCount}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {article.tags.slice(0, 3).map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="px-2 py-0.5 bg-muted/50 text-muted-foreground text-xs rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    {index < articles.length - 1 && (
+                      <div className="border-b border-border/20 mx-4" />
+                    )}
+                  </article>
+                ))}
+              </div>
             </div>
 
             <div ref={observerRef} className="py-8 flex justify-center">
