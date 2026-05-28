@@ -50,26 +50,6 @@ export interface ArticleDetail extends Article {
   relatedArticles: Article[]
 }
 
-/** 新闻 */
-export interface News {
-  id: number
-  title: string
-  summary: string
-  content: string
-  source: string
-  category: 'politics' | 'economy' | 'technology' | 'sports' | 'entertainment' | 'health' | 'science' | 'world'
-  cover?: string
-  isTop: boolean
-  viewCount: number
-  publishedAt: string
-  createdAt: string
-}
-
-/** 新闻详情 */
-export interface NewsDetail extends News {
-  relatedNews: News[]
-}
-
 /** 分页响应结构 */
 export interface PaginatedResponse<T> {
   list: T[]

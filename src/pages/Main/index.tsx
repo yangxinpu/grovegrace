@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { Outlet, Link, useLocation } from "react-router-dom"
-import { Moon, Sun, Menu, X, Search, Home, Quote, FileText, Newspaper, Info, Mic } from "lucide-react"
+import { Moon, Sun, Menu, X, Search, Home, Quote, FileText, Info, Mic } from "lucide-react"
 import { useTheme } from "@/stores/useTheme"
 import logo from "@/assets/images/logo.png"
 
@@ -18,7 +18,6 @@ export default function Main() {
     { path: "/", label: "首页", icon: Home },
     { path: "/quotes", label: "名言", icon: Quote },
     { path: "/articles", label: "文章", icon: FileText },
-    { path: "/news", label: "新闻", icon: Newspaper },
     { path: "/ai-speaking", label: "AI口语", icon: Mic },
     { path: "/about", label: "关于", icon: Info },
   ]
