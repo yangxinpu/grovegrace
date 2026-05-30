@@ -13,6 +13,7 @@ const Article = lazy(() => import('@/pages/Article'))
 const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'))
 const About = lazy(() => import('@/pages/About'))
 const AiSpeaking = lazy(() => import('@/pages/AiSpeaking'))
+const AiSpeakingDetail = lazy(() => import('@/pages/AiSpeakingDetail'))
 
 export default function App() {
   useTheme()
@@ -42,6 +43,8 @@ export default function App() {
               <Route path="articles" element={<Article />} />
               <Route path="article/:id" element={<ArticleDetail />} />
               <Route path="ai-speaking" element={<AiSpeaking />} />
+              <Route path="speaking" element={<AiSpeaking />} />
+              <Route path="speaking/:id" element={<AiSpeakingDetail />} />
               <Route path="about" element={<About />} />
             </Route>
             <Route path="*" element={<NotFound />} />
